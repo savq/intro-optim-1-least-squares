@@ -1,1 +1,2 @@
-# this file is here so Pkg.jl doesn't complain
+# Empty module so Pkg.jl doesn't complain
+module LeastSquares end

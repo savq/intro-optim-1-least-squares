@@ -6,6 +6,8 @@
 # should set it as an environment variable:
 # export YAHOOFINANCE_TOKEN='...'
 
+using Dates
+
 using CSV
 using DataFrames
 using Stonks    # package for financial data retrieval
@@ -17,16 +19,17 @@ function main()
     api_key = ENV["YAHOOFINANCE_TOKEN"]  # Will throw exception if YAHOOFINANCE_TOKEN wasn't defined
     client = YahooClient(api_key)
 
-    to = Date(2021, 03, 21)
-    from = to - Year(5)
+    to = Date(2022, 03, 21)
+    from = to - Year(1)
 
-    commodities = Dict(
+    stocks = Dict(
+        "bitcoin" => "BTC-USD",
         "gold" => "GC=F",
         "silver" => "SI=F",
         "crude" => "CL=F",
     )
 
-    for (name, ticker_symbol) in pairs(commodities)
+    for (name, ticker_symbol) in pairs(stocks)
         time_series = get_price(ticker_symbol, client; from=from, to=to)
         df = select!(DataFrame(time_series), ["date", "close"]) # we're only interested in the closing value
         path = "$dir$name.csv"
